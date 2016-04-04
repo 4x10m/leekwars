@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using LeekWars.LeekWarsAPI.Model;
 
-namespace LeekWars.LeekWarsAPI
+namespace LeekWars.LeekWarsAPI.Request
 {
     [DataContract]
     class GardenRequest : LeekWarsRequest

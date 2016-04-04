@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LeekWars.LeekWarsAPI;
 using System.Threading;
+using LeekWars.LeekWarsAPI.Model;
+using LeekWars.LeekWarsAPI.Client;
 
 namespace LeekWars.View
 {
     public partial class LeekUserForm : UserControl
     {
-        LeekWarsClient client = LeekWarsClient.getInstance();
+        LeekWarsClient client = LeekWarsWebClient.getInstance();
 
         public Leek leek;
         Garden garden;

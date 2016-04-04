@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LeekWars.LeekWarsAPI;
 using System.Threading;
+using LeekWars.LeekWarsAPI.Client;
+using LeekWars.LeekWarsAPI.Model;
 
 namespace LeekWars.View
 {
     public partial class MainUserFrame : UserControl
     {
-        LeekWarsClient client = LeekWarsClient.getInstance();
+        LeekWarsClient client = LeekWarsWebClient.getInstance();
 
         public Farmer farmer;
         private Leek leek;
@@ -29,6 +31,18 @@ namespace LeekWars.View
             InitializeComponent();
 
             Dock = DockStyle.Fill;
+
+            int total = 0;
+
+            garden = client.getGarden();
+
+            foreach (Leek leek in garden.leeks)
+            {
+                total += leek.fights;
+            }
+
+            label2.Text = total.ToString();
+            progressBar1.Maximum = total;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -42,23 +56,7 @@ namespace LeekWars.View
         {
             if(Visible && !Disposing)
             {
-                gardenLeek = null;
 
-                garden = client.getGarden();
-                
-                foreach(Leek leek in garden.leeks)
-                {
-                    if(this.leek.id == leek.id)
-                    {
-                        gardenLeek = leek;
-                    }
-                }
-                
-                if(gardenLeek != null)
-                {
-                    label2.Text = gardenLeek.fights.ToString();
-                    progressBar1.Maximum = gardenLeek.fights;
-                }
             }
         }
 
@@ -90,26 +88,46 @@ namespace LeekWars.View
 
         private void fight()
         {
-            log("fights started");
+            log("fights startedddd");
             updateProgress(0);
 
-            for(int nbFight = 0; nbFight < gardenLeek.fights; nbFight++)
+            int currentFight = 0;
+            int total = 0;
+
+            foreach(Leek leek in garden.leeks)
             {
-                Leek enemyLeek = gardenLeek.ennemies[0];
+                total += leek.fights;
+            }
 
-                log("fight against" + enemyLeek.name + "(" + enemyLeek.id.ToString() + ")");
-                updateProgress(nbFight);
+            log("a total of " + total.ToString() + " fights to do");
 
-                client.startSoloFight(gardenLeek, enemyLeek);
+            Leek[] leeksCopy = garden.leeks;
 
-                garden = client.getGarden();
-
-                foreach (Leek leek in garden.leeks)
+            foreach (Leek leek in leeksCopy)
+            {
+                for (int nbFight = 0; nbFight < leek.fights; nbFight++)
                 {
-                    if (this.leek.id == leek.id)
+                    currentFight++;
+
+                    garden = client.getGarden();
+
+                    Leek leekFromGarden = null;
+
+                    foreach(Leek tmpLeek in garden.leeks)
                     {
-                        gardenLeek = leek;
+                        if(leek.id == tmpLeek.id)
+                        {
+                            leekFromGarden = tmpLeek;
+                        }
                     }
+
+                    Leek enemyLeek = leekFromGarden.ennemies[0];
+
+                    log("fight " + "(" + currentFight.ToString() + ") against" + enemyLeek.name + "(" + enemyLeek.id.ToString() + ") with " + leekFromGarden.name + "(" + leekFromGarden.id.ToString() + ")");
+                    updateProgress(currentFight);
+
+                    client.startSoloFight(leekFromGarden, enemyLeek);
+                    client.startSoloFight(leekFromGarden, enemyLeek);
                 }
             }
         }

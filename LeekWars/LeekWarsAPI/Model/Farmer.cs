@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
 
-namespace LeekWars.LeekWarsAPI
+namespace LeekWars.LeekWarsAPI.Model
 {
     [DataContract]
     public class Farmer

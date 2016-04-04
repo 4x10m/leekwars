@@ -7,25 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using LeekWars.LeekWarsAPI;
+using LeekWars.LeekWarsAPI.Client;
+using LeekWars.LeekWarsAPI.Model;
 
 namespace LeekWars.View
 {
-    public partial class Main : Form
+    public partial class MainForm : Form
     {
-        LeekWarsClient client = LeekWarsClient.getInstance();
+        LeekWarsClient client = LeekWarsWebClient.getInstance();
         private Farmer farmer = null;
         Garden garden;
 
-        public Main(Farmer farmer)
+        public MainForm()
         {
-            this.farmer = farmer;
+            LoginForm loginForm = new LoginForm();
+            loginForm.ShowDialog();
+
+            this.farmer = loginForm.farmer;
 
             InitializeComponent();
-        }
 
-        private void Main_Shown(object sender, EventArgs e)
-        {
             foreach (Leek leek in farmer.leeks)
             {
                 LeekUserForm leekUserForm = new LeekUserForm();
@@ -37,11 +38,6 @@ namespace LeekWars.View
 
                 tabControl1.TabPages.Add(leekPage);
             }
-        }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

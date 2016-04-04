@@ -10,17 +10,21 @@ using LeekWars.LeekWarsAPI;
 using LeekWars.LeekWarsAPI.Model;
 using System.Threading;
 using System.Windows.Forms;
+using LeekWars.LeekWarsAPI.Client;
+using LeekWars.LeekWarsAPI.Model;
 
 namespace LeekWars.View
 {
     public partial class LoginForm : Form
     {
-        private LeekWarsClient client = LeekWarsClient.getInstance();
+        private LeekWarsClient client = LeekWarsWebClient.getInstance();
 
         LoadingUserForm loadingUserForm = new LoadingUserForm();
 
         private delegate void ShowEventHanlder();
         private delegate void ShowMainFormEventHanlder(Farmer farmer);
+
+        public Farmer farmer { get; set; }
 
         public LoginForm()
         {
@@ -32,8 +36,8 @@ namespace LeekWars.View
             loadingUserForm.Anchor = (AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
 
             loginUserForm1.onButonClicked += new LoginUserForm.LoginUserFormConnectionButtonClicked(loadingUserFormConnectionButtonClicked);
-            client.onLoginEndEvent += new LeekWarsClient.LoginEndEventHandler(onLoginUserFormConnectionEnd);
-            client.onLoginErrorEvent += new LeekWarsClient.LoginErrorEventHandler(onLoginUserFormConnectionError);
+            client.onLoginEndEvent += new EventHandler(onLoginUserFormConnectionEnd);
+            client.onLoginErrorEvent += new EventHandler(onLoginUserFormConnectionError);
         }
 
         public void loadingUserFormConnectionButtonClicked(string username, string password)
@@ -45,11 +49,11 @@ namespace LeekWars.View
             loadingUserForm.Show();
         }
 
-        private void onLoginUserFormConnectionError()
+        private void onLoginUserFormConnectionError(object sender, EventArgs args)
         {
             if (InvokeRequired)
             {
-                Invoke(new ShowEventHanlder(onLoginUserFormConnectionError));
+                Invoke(new EventHandler(onLoginUserFormConnectionError));
             }
             else
             {
@@ -59,20 +63,21 @@ namespace LeekWars.View
             }
         }
 
-
-
-        private void onLoginUserFormConnectionEnd(Farmer farmer)
+        private void onLoginUserFormConnectionEnd(object sender, EventArgs e)
         {
+            onLoginEndEventEventArgs eventArgs = (onLoginEndEventEventArgs)e;
+            Farmer farmer = eventArgs.farmer;
+
             if (InvokeRequired)
             {
-                Invoke(new ShowMainFormEventHanlder(onLoginUserFormConnectionEnd), farmer);
+                Invoke(new EventHandler(onLoginUserFormConnectionEnd), sender, e);
             }
             else
             {
-                Main mainForm = new Main(farmer);
-                mainForm.Show();
+                this.farmer = farmer;
+                DialogResult = DialogResult.OK;
 
-                Hide();
+                Close();
             }
         }
     }

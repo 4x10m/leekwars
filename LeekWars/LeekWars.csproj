@@ -52,7 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LeekWarsAPI\Client\LeekWarsClient.cs" />
+    <Compile Include="LeekWarsAPI\Client\LeekWarsWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="LeekWarsAPI\Model\Member.cs" />
+    <Compile Include="Utils\Parser.cs" />
+    <Compile Include="Utils\Urls.cs" />
     <Compile Include="View\LoadingUserForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -70,6 +76,12 @@
     </Compile>
     <Compile Include="View\LoginUserForm.Designer.cs">
       <DependentUpon>LoginUserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="View\MainUserFrame.cs">
       <SubType>UserControl</SubType>
@@ -95,12 +107,6 @@
     <Compile Include="View\LeekUserForm.Designer.cs">
       <DependentUpon>LeekUserForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
     <Compile Include="LeekWarsAPI\Model\AI.cs" />
     <Compile Include="LeekWarsAPI\Model\Chip.cs" />
     <Compile Include="LeekWarsAPI\Model\Composition.cs" />
@@ -110,7 +116,7 @@
     <Compile Include="LeekWarsAPI\Request\GardenRequest.cs" />
     <Compile Include="LeekWarsAPI\Model\Leek.cs" />
     <Compile Include="LeekWarsAPI\Model\Farmer.cs" />
-    <Compile Include="LeekWarsAPI\LeekWarsClient.cs" />
+    <Compile Include="LeekWarsAPI\Client\LeekWarsWebRequestClient.cs" />
     <Compile Include="LeekWarsAPI\Request\LeekWarsRequest.cs" />
     <Compile Include="LeekWarsAPI\Request\LoginRequest.cs" />
     <Compile Include="LeekWarsAPI\Model\Potion.cs" />
@@ -137,6 +143,9 @@
     <EmbeddedResource Include="View\LoginUserForm.resx">
       <DependentUpon>LoginUserForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\MainUserFrame.resx">
       <DependentUpon>MainUserFrame.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,9 +157,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\LeekUserForm.resx">
       <DependentUpon>LeekUserForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
